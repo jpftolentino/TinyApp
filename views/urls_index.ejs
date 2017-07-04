@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ./partials/_header %>
+</head>
+<body>
+    <!-- Add your EJS code here -->
+
+    <ul><% for( var key in urls) { %>
+      <li> <%= urls[key] %> - <%= key %></li>
+    <% } %>
+    </ul>
+
+    <a href="">Shorten URL</a>
+
+</body>
+</html>
