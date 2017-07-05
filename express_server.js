@@ -57,6 +57,12 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+app.post("/urls/:id", (req, res) => {
+  let updateShortURL = req.params.id;
+  urlDatabase[updateShortURL] = req.body.newURL;
+  res.redirect("/urls");
+});
+
 app.get("/u/:shortURL", (req, res) => {
   //if i enter url into address bar it would redirect me to actual url
   let longURL = urlDatabase[req.params.shortURL];
