@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <% include ./partials/_header %>
-  <% include partials/head %>
+  <h1>Tiny App</h1>
 </head>
 <body>
+    <% include ./partials/_header %>
     <!-- Add your EJS code here -->
   <h2>ShortURL: <%= shortURL %></h2>
   <form method="POST" action="/urls/<%= shortURL %>">

@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <% include ./partials/_header %>
-  <% include partials/head %>
+  <h1>Tiny App</h1>
 </head>
 <body>
     <!-- Add your EJS code here -->
-
+    <% include ./partials/_header %>
     <table><% for( var key in urls) { %>
       <tr>
         <form action="/urls/<%= key %>/delete" method="POST">
