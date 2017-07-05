@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <% include ./partials/_header %>
+  <% include ./partials/_header %>
+  <% include partials/head %>
 </head>
 <body>
     <!-- Add your EJS code here -->
 
-    <ul><% for( var key in urls) { %>
-      <li> <%= urls[key] %> - <%= key %></li>
+    <table><% for( var key in urls) { %>
+      <tr>
+        <form action="/urls/b2xVn2/delete" method="POST">
+          <td> <%= urls[key] %> </td>
+          <td><%= key %></td>
+          <td><input type="submit" value="Delete"></td>
+        </form>
+      </tr>
     <% } %>
-    </ul>
+    </table>
 
-    <a href="">Shorten URL</a>
+    <a href="/urls/new"><br />Shorten URL</a>
 
 </body>
 </html>

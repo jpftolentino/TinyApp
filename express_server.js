@@ -22,19 +22,20 @@ function generateRandomString() {
 }
 
 app.get("/", (req, res) => {
-  res.end("Hello!");
+  res.redirect("urls");
 });
 
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
-app.get("/hello", (req, res) => {
-  res.end("<html><body>Hello <b>World</b></body></html>\n");
-});
+// app.get("/hello", (req, res) => {
+//   res.end("<html><body>Hello <b>World</b></body></html>\n");
+// });
 
 //only able to access urls key not the actualy object
 app.get("/urls", (req, res) => {
+  //req.body.fieldname/key
   let templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
@@ -44,7 +45,6 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // debug statement to see POST parameters
   var shortLink = generateRandomString();
   urlDatabase[shortLink] = req.body.longURL;
   let responseLink = `http://localhost:8080/urls/${shortLink}`;
@@ -54,7 +54,6 @@ app.post("/urls", (req, res) => {
 
 app.get("/urls/:id", (req, res) => {
   let templateVars = { urls: urlDatabase, shortURL: req.params.id};
-  console.log(templateVars);
   res.render("urls_show", templateVars);
 });
 
@@ -62,6 +61,14 @@ app.get("/u/:shortURL", (req, res) => {
   //if i enter url into address bar it would redirect me to actual url
   let longURL = urlDatabase[req.params.shortURL];
   res.redirect(longURL);
+});
+
+app.post("/urls/:id/delete", (req,res) => {
+  console.log(urlDatabase);
+  let key = req.params.id;
+  console.log(urlDatabase[req.params.id]);
+  delete urlDatabase[req.params.id];
+  res.redirect("/urls");
 });
 
 app.listen(PORT, () => {
