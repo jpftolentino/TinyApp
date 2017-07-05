@@ -9,7 +9,7 @@
 
     <table><% for( var key in urls) { %>
       <tr>
-        <form action="/urls/b2xVn2/delete" method="POST">
+        <form action="/urls/<%= key %>/delete" method="POST">
           <td> <%= urls[key] %> </td>
           <td><%= key %></td>
           <td><input type="submit" value="Delete"></td>
