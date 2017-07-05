@@ -25,13 +25,15 @@ app.get("/", (req, res) => {
   res.redirect("urls");
 });
 
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
-});
-
 // app.get("/hello", (req, res) => {
 //   res.end("<html><body>Hello <b>World</b></body></html>\n");
 // });
+
+app.get("/u/:shortURL", (req, res) => {
+  //if i enter url into address bar it would redirect me to actual url
+  let longURL = urlDatabase[req.params.shortURL];
+  res.redirect(longURL);
+});
 
 //only able to access urls key not the actualy object
 app.get("/urls", (req, res) => {
@@ -44,17 +46,22 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
+app.get("/urls.json", (req, res) => {
+  res.json(urlDatabase);
+});
+
+app.get("/urls/:id", (req, res) => {
+  let templateVars = { urls: urlDatabase, shortURL: req.params.id};
+  res.render("urls_show", templateVars);
+});
+
+
+
 app.post("/urls", (req, res) => {
   var shortLink = generateRandomString();
   urlDatabase[shortLink] = req.body.longURL;
   let responseLink = `http://localhost:8080/urls/${shortLink}`;
   res.redirect(responseLink);
-});
-
-
-app.get("/urls/:id", (req, res) => {
-  let templateVars = { urls: urlDatabase, shortURL: req.params.id};
-  res.render("urls_show", templateVars);
 });
 
 app.post("/urls/:id", (req, res) => {
@@ -63,17 +70,16 @@ app.post("/urls/:id", (req, res) => {
   res.redirect("/urls");
 });
 
-app.get("/u/:shortURL", (req, res) => {
-  //if i enter url into address bar it would redirect me to actual url
-  let longURL = urlDatabase[req.params.shortURL];
-  res.redirect(longURL);
-});
-
 app.post("/urls/:id/delete", (req,res) => {
   console.log(urlDatabase);
   let key = req.params.id;
   console.log(urlDatabase[req.params.id]);
   delete urlDatabase[req.params.id];
+  res.redirect("/urls");
+});
+
+app.post("/login", (req, res) => {
+  res.cookie('username', req.body.username);
   res.redirect("/urls");
 });
 
