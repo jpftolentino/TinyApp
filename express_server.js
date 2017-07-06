@@ -130,20 +130,14 @@ app.post("/register", (req, res) => {
   var emailExist = false;
   //Create a function that checks to see if email exists
 
-  if( registerEMAIL == "" || registerPASS == ""){
-    res.status(400).send("Email or Password cannot be empty!");
-  }
-
   emailExist = checkEmail(registerEMAIL);
 
-  if(emailExist == true){
+  if( registerEMAIL == "" || registerPASS == ""){
+    res.status(400).send("Email or Password cannot be empty!");
+  } else if(emailExist == true){
     res.status(400).send("Email already exists!");
-  }
-
-  if(emailExist == false){
+  } else {
     users[randomUSERid] = {id:randomUSERid, email:registerEMAIL, password:registerPASS}
-
-    //set new user_id as a newly generated user id
     res.cookie("user_id", randomUSERid);
     res.redirect("/urls");
   }
