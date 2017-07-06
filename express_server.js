@@ -16,7 +16,7 @@ app.set("view engine", "ejs");
 
 /*~~~~~~~~~~~~~~~~~~~~USERS~~~~~~~~~~~~~~~~~~~~*/
 
-
+//for numbers use for loop, for strings for in
 const users = {
   "userRandomID": {
     id: "userRandomID",
@@ -58,6 +58,16 @@ function generateRandomURLid() {
 //generates 6 random characters
 function generateRandomUSERid() {
   return Math.floor((1 + Math.random()) * 0x1000000).toString(16).substring(1);
+}
+
+function checkEmail(registerEMAIL) {
+  for (var userId in users) {
+    if(users[userId]['email'] == registerEMAIL){
+      return true;
+    }
+  }
+
+  return false;
 }
 
 
@@ -117,13 +127,26 @@ app.post("/register", (req, res) => {
   let randomUSERid = generateRandomUSERid();
   let registerEMAIL = req.body.email;
   let registerPASS = req.body.password;
-  console.log(randomUSERid, registerEMAIL, registerPASS);
-  users[randomUSERid] = {id:randomUSERid, email:registerEMAIL, password:registerPASS}
-  console.log(users);
+  var emailExist = false;
+  //Create a function that checks to see if email exists
 
-  //set new user_id as a newly generated user id
-  res.cookie("user_id", randomUSERid);
-  res.redirect("/urls");
+  if( registerEMAIL == "" || registerPASS == ""){
+    res.status(400).send("Email or Password cannot be empty!");
+  }
+
+  emailExist = checkEmail(registerEMAIL);
+
+  if(emailExist == true){
+    res.status(400).send("Email already exists!");
+  }
+
+  if(emailExist == false){
+    users[randomUSERid] = {id:randomUSERid, email:registerEMAIL, password:registerPASS}
+
+    //set new user_id as a newly generated user id
+    res.cookie("user_id", randomUSERid);
+    res.redirect("/urls");
+  }
 });
 
 app.post("/urls", (req, res) => {
@@ -140,9 +163,7 @@ app.post("/urls/:id", (req, res) => {
 });
 
 app.post("/urls/:id/delete", (req,res) => {
-  console.log(urlDatabase);
   let key = req.params.id;
-  console.log(urlDatabase[req.params.id]);
   delete urlDatabase[req.params.id];
   res.redirect("/urls");
 });

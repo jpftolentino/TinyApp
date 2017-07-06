@@ -59,3 +59,6 @@ typings/
 
 # ignores PSEUDO CODE PAGE
 PSEUDO_CODE
+
+# test.js is for testing out functions quickly
+test.js
