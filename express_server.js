@@ -1,3 +1,6 @@
+/*~~~~~~~~~~~~~~~~~~~~REQUIRED MODULES~~~~~~~~~~~~~~~~~~~~*/
+
+
 var PORT = process.env.PORT || 8080; // default port 8080
 
 var express = require("express");
@@ -11,18 +14,50 @@ app.use(cookieParser());
 
 app.set("view engine", "ejs");
 
+/*~~~~~~~~~~~~~~~~~~~~USERS~~~~~~~~~~~~~~~~~~~~*/
+
+
+const users = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  },
+  "user3RandomID": {
+    id: "user3RandomID",
+    email: "goku@saiyan.com",
+    password: "supersaiyan"
+  },
+  "user4RandomID": {
+    id: "user4RandomID",
+    email: "winston@battle.net",
+    password: "harambe"
+  }
+}
+
+/*~~~~~~~~~~~~~~~~~~~~URL DB~~~~~~~~~~~~~~~~~~~~*/
+
+
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 
-function generateRandomString() {
-  let randomString = "";
-  let possibleString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwuxyz0123456789";
-  for (let i = 0; i < 6; i++) {
-    randomString += possibleString.charAt(Math.floor(Math.random() * possibleString.length));
-  }
-  return randomString;
+/*~~~~~~~~~~~~~~~~~~~~ADDITIONAL FUNCTIONS~~~~~~~~~~~~~~~~~~~~*/
+
+//generates 5 random characters
+function generateRandomURLid() {
+  return Math.floor((1 + Math.random()) * 0x100000).toString(16).substring(1);
+}
+
+//generates 6 random characters
+function generateRandomUSERid() {
+  return Math.floor((1 + Math.random()) * 0x1000000).toString(16).substring(1);
 }
 
 
@@ -35,6 +70,11 @@ app.get("/", (req, res) => {
 // app.get("/hello", (req, res) => {
 //   res.end("<html><body>Hello <b>World</b></body></html>\n");
 // });
+
+//Gets register page
+app.get("/register", (req, res) => {
+  res.render("urls_register");
+});
 
 //Sends user to actualy website of shorURL
 app.get("/u/:shortURL", (req, res) => {
@@ -56,6 +96,7 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new", templateVars);
 });
 
+//checks URL database
 app.get("/urls.json", (req, res) => {
   // let templateVars = { urls: urlDatabase,username: req.cookies.username };
   res.json(urlDatabase);
@@ -71,8 +112,22 @@ app.get("/urls/:id", (req, res) => {
 
 /*~~~~~~~~~~~~~~~~~~~~POST~~~~~~~~~~~~~~~~~~~~*/
 
+app.post("/register", (req, res) => {
+  //generate new user ID
+  let randomUSERid = generateRandomUSERid();
+  let registerEMAIL = req.body.email;
+  let registerPASS = req.body.password;
+  console.log(randomUSERid, registerEMAIL, registerPASS);
+  users[randomUSERid] = {id:randomUSERid, email:registerEMAIL, password:registerPASS}
+  console.log(users);
+
+  //set new user_id as a newly generated user id
+  res.cookie("user_id", randomUSERid);
+  res.redirect("/urls");
+});
+
 app.post("/urls", (req, res) => {
-  var shortLink = generateRandomString();
+  var shortLink = generateRandomURLid();
   urlDatabase[shortLink] = req.body.longURL;
   let responseLink = `http://localhost:8080/urls/${shortLink}`;
   res.redirect(responseLink);
