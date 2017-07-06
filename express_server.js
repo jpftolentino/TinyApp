@@ -60,9 +60,17 @@ function generateRandomUSERid() {
   return Math.floor((1 + Math.random()) * 0x1000000).toString(16).substring(1);
 }
 
-function checkEmail(registerEMAIL) {
+function getUserId(email){
   for (var userId in users) {
-    if(users[userId]['email'] == registerEMAIL){
+    if(users[userId]['email'] == email){
+      return userId;
+    }
+  }
+}
+
+function checkEmail(email) {
+  for (var userId in users) {
+    if(users[userId]['email'] == email){
       return true;
     }
   }
@@ -70,6 +78,15 @@ function checkEmail(registerEMAIL) {
   return false;
 }
 
+function checkPassword(password) {
+  for (var userId in users) {
+    if(users[userId]['password'] == password){
+      return true;
+    }
+  }
+
+  return false;
+}
 
 /*~~~~~~~~~~~~~~~~~~~~GET~~~~~~~~~~~~~~~~~~~~*/
 
@@ -81,40 +98,67 @@ app.get("/", (req, res) => {
 //   res.end("<html><body>Hello <b>World</b></body></html>\n");
 // });
 
+app.get("/login", (req, res) => {
+  let userId = req.cookies.user_id;
+  let userInfo = users[userId];
+  let templateVars = { urls: urlDatabase, users: userInfo};
+  let longURL = urlDatabase[req.params.shortURL];
+  res.render("urls_login", templateVars);
+});
+
 //Gets register page
 app.get("/register", (req, res) => {
   res.render("urls_register");
 });
 
-//Sends user to actualy website of shorURL
+//Sends user to actual website of shorURL
 app.get("/u/:shortURL", (req, res) => {
-  let templateVars = { urls: urlDatabase,username: req.cookies.username };
-  //if i enter url into address bar it would redirect me to actual url
+  let userId = req.cookies.user_id;
+  let userInfo = users[userId];
+  let templateVars = { urls: urlDatabase, users: userInfo};
   let longURL = urlDatabase[req.params.shortURL];
   res.redirect(longURL, templateVars);
 });
 
 //Actual index page is being shown with shortURLS and longURLS
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase,username: req.cookies.username };
-  res.render("urls_index", templateVars);
+  let userId = req.cookies.user_id;
+  if(userId === undefined){
+    let templateVars = { urls: urlDatabase, currentUser: false};
+    res.render("urls_index", templateVars);
+  } else {
+    let userInfo = users[userId];
+    let userEmail = users[userId]['email'];
+    let templateVars = { urls: urlDatabase, users: userInfo, currentUser: userEmail };
+    res.render("urls_index", templateVars);
+  }
 });
 
 //Adding new URL
 app.get("/urls/new", (req, res) => {
-  let templateVars = { urls: urlDatabase,username: req.cookies.username };
+  let userId = req.cookies.user_id;
+  if(userId === undefined){
+    let templateVars = { urls: urlDatabase, currentUser: false};
+    res.render("urls_index", templateVars);
+  } else {
+    let userInfo = users[userId];
+    let userEmail = users[userId]['email'];
+    let templateVars = { urls: urlDatabase, users: userInfo, currentUser: userEmail };
   res.render("urls_new", templateVars);
+  }
 });
 
 //checks URL database
 app.get("/urls.json", (req, res) => {
-  // let templateVars = { urls: urlDatabase,username: req.cookies.username };
   res.json(urlDatabase);
 });
 
 //Modifying long url before making it a shortURL
 app.get("/urls/:id", (req, res) => {
-  let templateVars = { urls: urlDatabase, shortURL: req.params.id, username: req.cookies.username };
+  let userId = req.cookies.user_id;
+  let userInfo = users[userId];
+  let userEmail = users[userId]['email'];
+  let templateVars = { urls: urlDatabase, users: userInfo, currentUser: userEmail };
   res.render("urls_show", templateVars);
 
 });
@@ -163,12 +207,25 @@ app.post("/urls/:id/delete", (req,res) => {
 });
 
 app.post("/login", (req, res) => {
-  res.cookie('username', req.body.username);
-  res.redirect("/urls");
+  let loginEmail = req.body.email;
+  let loginPassword = req.body.password;
+  let userId = getUserId(loginEmail);
+
+  if(checkEmail(loginEmail)){
+    if(checkPassword(loginPassword)){
+        res.cookie('user_id', userId);
+        console.log(userId);
+        res.redirect("/");
+    } else {
+      res.status(403).send("Password does not match");
+    }
+  } else {
+    res.status(403).send("User does not exist");
+  }
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie('username');
+  res.clearCookie('user_id');
   res.redirect("/urls");
 });
 
