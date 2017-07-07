@@ -7,18 +7,7 @@
     <!-- if user is not logged in show this  -->
     <% include ./partials/_header %>
     <% if( currentUser === false) {%>
-    <table><% for( var key in urls) { %>
-      <tr>
-        <form action="/urls/<%= key %>/delete" method="POST">
-          <td><a href="<%= urls[key]['longURL'] %>"><%= key %></a></td>
-            <td><%= urls[key]['longURL'] %></td>
-            <td><a href="/urls/<%= urls[key] %>">Edit</a></td>
-            <td><input type="submit" value="Delete"></td>
-        </form>
-      </tr>
-    <% } %>
-    </table>
-    <a href="/login"><br />Shorten URL</a>
+      <p>Please Log In or Register</p>
     <% } else { %>
     <table><% for( var key in urls) { %>
       <tr>
