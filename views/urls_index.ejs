@@ -4,20 +4,36 @@
   <h1>Tiny App</h1>
 </head>
 <body>
-    <!-- Add your EJS code here -->
+    <!-- if user is not logged in show this  -->
     <% include ./partials/_header %>
+    <% if( currentUser === false) {%>
     <table><% for( var key in urls) { %>
       <tr>
         <form action="/urls/<%= key %>/delete" method="POST">
-          <td> <%= urls[key] %> </td>
-          <td><%= key %></td>
-          <td><input type="submit" value="Delete"></td>
+          <td><a href="<%= urls[key]['longURL'] %>"><%= key %></a></td>
+            <td><%= urls[key]['longURL'] %></td>
+            <td><a href="/urls/<%= urls[key] %>">Edit</a></td>
+            <td><input type="submit" value="Delete"></td>
         </form>
       </tr>
     <% } %>
     </table>
-
+    <a href="/login"><br />Shorten URL</a>
+    <% } else { %>
+    <table><% for( var key in urls) { %>
+      <tr>
+        <% if( urls[key]['id'] == users['id']) {%>
+        <form action="/urls/<%= key %>/delete" method="POST">
+          <td><a href="<%= urls[key]['longURL'] %>"><%= key %></a></td>
+            <td><%= urls[key]['longURL'] %></td>
+            <td><a href="/urls/<%= urls[key]['shortURL'] %>">Edit</a></td>
+            <td><input type="submit" value="Delete"></td>
+        </form>
+        <% } %>
+      </tr>
+    <% } %>
+    </table>
+    <% } %>
     <a href="/urls/new"><br />Shorten URL</a>
-
 </body>
 </html>

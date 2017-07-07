@@ -19,24 +19,24 @@ app.set("view engine", "ejs");
 //for numbers use for loop, for strings for in
 const users = {
   "userRandomID": {
-    id: "userRandomID",
-    email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    'id': "userRandomID",
+    'email': "user@example.com",
+    'password': "purple-monkey-dinosaur"
   },
  "user2RandomID": {
-    id: "user2RandomID",
-    email: "user2@example.com",
-    password: "dishwasher-funk"
+    'id': "user2RandomID",
+    'email': "user2@example.com",
+    'password': "dishwasher-funk"
   },
   "user3RandomID": {
-    id: "user3RandomID",
-    email: "goku@saiyan.com",
-    password: "supersaiyan"
+    'id': "user3RandomID",
+    'email': "goku@saiyan.com",
+    'password': "supersaiyan"
   },
   "user4RandomID": {
-    id: "user4RandomID",
-    email: "winston@battle.net",
-    password: "harambe"
+    'id': "user4RandomID",
+    'email': "winston@battle.net",
+    'password': "harambe"
   }
 }
 
@@ -44,8 +44,26 @@ const users = {
 
 
 var urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "9sm4uK": {
+    'longURL': "http://www.lighthouselabs.ca",
+    'shortURL': '9sm4uK',
+    'id': "user3RandomID"
+  },
+  "b3xVn4": {
+    'longURL': "http://www.newegg.ca",
+    'shortURL': 'b3xVn4',
+    'id': "user3RandomID"
+  },
+  "b2xVn2": {
+    'longURL': "http://www.battle.net",
+    'shortURL': 'b2xVn2',
+    'id': "user4RandomID"
+  },
+  "9sm5xK": {
+    'longURL': "http://www.google.com",
+    'shortURL': '9sm5xK',
+    'id': "user4RandomID"
+  }
 };
 
 /*~~~~~~~~~~~~~~~~~~~~ADDITIONAL FUNCTIONS~~~~~~~~~~~~~~~~~~~~*/
@@ -144,7 +162,7 @@ app.get("/urls/new", (req, res) => {
     let userInfo = users[userId];
     let userEmail = users[userId]['email'];
     let templateVars = { urls: urlDatabase, users: userInfo, currentUser: userEmail };
-  res.render("urls_new", templateVars);
+    res.render("urls_new", templateVars);
   }
 });
 
@@ -156,11 +174,16 @@ app.get("/urls.json", (req, res) => {
 //Modifying long url before making it a shortURL
 app.get("/urls/:id", (req, res) => {
   let userId = req.cookies.user_id;
-  let userInfo = users[userId];
-  let userEmail = users[userId]['email'];
-  let templateVars = { urls: urlDatabase, users: userInfo, currentUser: userEmail };
-  res.render("urls_show", templateVars);
-
+  if(userId === undefined){
+    res.redirect("/login");
+  } else {
+    let shortURL = req.params.id;
+    let userId = req.cookies.user_id;
+    let userInfo = users[userId];
+    let userEmail = users[userId]['email'];
+    let templateVars = { urls: urlDatabase, users: userInfo, currentUser: userEmail, shortURL: shortURL};
+    res.render("urls_show", templateVars);
+  }
 });
 
 
@@ -189,21 +212,29 @@ app.post("/register", (req, res) => {
 
 app.post("/urls", (req, res) => {
   var shortLink = generateRandomURLid();
-  urlDatabase[shortLink] = req.body.longURL;
+  // urlDatabase = shortLink;
+  urlDatabase[shortLink] = {'longURL':req.body.longURL, 'shortURL':shortLink, 'id':req.cookies.user_id};
   let responseLink = `http://localhost:8080/urls/${shortLink}`;
   res.redirect(responseLink);
 });
 
 app.post("/urls/:id", (req, res) => {
-  let updateShortURL = req.params.id;
-  urlDatabase[updateShortURL] = req.body.newURL;
-  res.redirect("/urls");
+    let updateShortURL = req.params.id;
+    urlDatabase[updateShortURL]['longURL'] = req.body.newURL;
+    console.log(urlDatabase);
+    res.redirect("/urls");
 });
 
 app.post("/urls/:id/delete", (req,res) => {
-  let key = req.params.id;
-  delete urlDatabase[req.params.id];
-  res.redirect("/urls");
+  let userId = req.cookies.user_id;
+  if(userId === undefined){
+    let templateVars = { urls: urlDatabase, currentUser: false};
+    res.redirect("/login");
+  } else {
+    let key = req.params.id;
+    delete urlDatabase[req.params.id];
+    res.redirect("/urls");
+  }
 });
 
 app.post("/login", (req, res) => {
@@ -214,7 +245,6 @@ app.post("/login", (req, res) => {
   if(checkEmail(loginEmail)){
     if(checkPassword(loginPassword)){
         res.cookie('user_id', userId);
-        console.log(userId);
         res.redirect("/");
     } else {
       res.status(403).send("Password does not match");

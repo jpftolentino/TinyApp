@@ -8,7 +8,7 @@
     <!-- Add your EJS code here -->
   <h2>ShortURL: <%= shortURL %></h2>
   <form method="POST" action="/urls/<%= shortURL %>">
-    <input name="newURL" type="text" value="<%= urls[shortURL] %>">
+    <input name="newURL" type="text" value="<%= urls[shortURL]['longURL'] %>">
     <input type="submit" value="Update">
   </form>
 </body>
