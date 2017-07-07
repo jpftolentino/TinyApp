@@ -3,14 +3,17 @@
 
 const PORT = process.env.PORT || 8080; // default port 8080
 const bcrypt = require('bcrypt');
+const methodOverride = require('method-override')
 const bodyParser = require("body-parser");
 const cookieSession = require('cookie-session');
 const express = require("express");
 
 const app = express();
-app.use(bodyParser.urlencoded({extended: true}));
 
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
 app.set("view engine", "ejs");
+
 app.use(cookieSession({
   name: 'session',
   keys: ['key1','key2'],
@@ -227,19 +230,18 @@ app.post("/urls", (req, res) => {
   res.redirect(responseLink);
 });
 
-app.post("/urls/:id", (req, res) => {
+app.put("/urls/:id", (req, res) => {
     let userId = req.session.user_id;
     if( userId !== undefined ){
       let updateShortURL = req.params.id;
       urlDatabase[updateShortURL]['longURL'] = req.body.newURL;
-      console.log(urlDatabase);
       res.redirect("/urls");
     } else {
       res.redirect("/urls_404");
     }
 });
 
-app.post("/urls/:id/delete", (req,res) => {
+app.delete("/urls/:id/delete", (req,res) => {
   let userId = req.session.user_id;
   if(userId !== undefined){
     let key = req.params.id;
@@ -258,7 +260,6 @@ app.post("/login", (req, res) => {
 
   if(checkEmail(loginEmail)){
     if(checkPassword(loginPassword, userId)){
-        // res.cookie('user_id', userId);
         req.session.user_id = userId;
         res.redirect("/urls");
     } else {

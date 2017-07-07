@@ -12,7 +12,7 @@
     <table><% for( var key in urls) { %>
       <tr>
         <% if( urls[key]['id'] == users['id']) {%>
-        <form action="/urls/<%= key %>/delete" method="POST">
+        <form action="/urls/<%= key %>/delete?_method=DELETE" method="POST">
           <td><a href="<%= urls[key]['longURL'] %>"><%= key %></a></td>
             <td><%= urls[key]['longURL'] %></td>
             <td><a href="/urls/<%= urls[key]['shortURL'] %>">Edit</a></td>
