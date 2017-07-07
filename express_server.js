@@ -1,14 +1,14 @@
-/*~~~~~~~~~~~~~~~~~~~~REQUIRED MODULES~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~~~~~~~~~REQUIRED MODULES & DECLARATIONS~~~~~~~~~~~~~~~~~~~~*/
 
 
 var PORT = process.env.PORT || 8080; // default port 8080
-
+const bcrypt = require('bcrypt');
 var express = require("express");
-var app = express();
-
-const bodyParser = require("body-parser");
 var cookieParser = require('cookie-parser');
+const bodyParser = require("body-parser");
 
+
+var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
@@ -66,6 +66,15 @@ var urlDatabase = {
   }
 };
 
+/*~~~~~~~~~~~~~~~~~~~~ENCRYPT EXISTING PASSWORDS~~~~~~~~~~~~~~~~~~~~*/
+
+
+for(var key in users){
+  let password = users[key]['password'];
+  var hashed_password = bcrypt.hashSync(password,10);
+  users[key]['password'] = hashed_password;
+}
+
 /*~~~~~~~~~~~~~~~~~~~~ADDITIONAL FUNCTIONS~~~~~~~~~~~~~~~~~~~~*/
 
 //generates 5 random characters
@@ -96,14 +105,9 @@ function checkEmail(email) {
   return false;
 }
 
-function checkPassword(password) {
-  for (var userId in users) {
-    if(users[userId]['password'] == password){
-      return true;
-    }
-  }
-
-  return false;
+function checkPassword(password, userId) {
+  let hashedPassword = users[userId]['password'];
+  return bcrypt.compareSync(password, hashedPassword);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~GET~~~~~~~~~~~~~~~~~~~~*/
@@ -204,8 +208,10 @@ app.post("/register", (req, res) => {
   } else if(emailExist == true){
     res.status(400).send("Email already exists!");
   } else {
-    users[randomUSERid] = {id:randomUSERid, email:registerEMAIL, password:registerPASS}
+    let hashedPassword = bcrypt.hashSync(registerPASS, 10);
+    users[randomUSERid] = {id:randomUSERid, email:registerEMAIL, password:hashedPassword}
     res.cookie("user_id", randomUSERid);
+    console.log(users);
     res.redirect("/urls");
   }
 });
@@ -243,7 +249,7 @@ app.post("/login", (req, res) => {
   let userId = getUserId(loginEmail);
 
   if(checkEmail(loginEmail)){
-    if(checkPassword(loginPassword)){
+    if(checkPassword(loginPassword, userId)){
         res.cookie('user_id', userId);
         res.redirect("/");
     } else {
