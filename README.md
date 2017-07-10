@@ -2,8 +2,9 @@
 
 ## Final Product
 
-!["screenshot description"](#)
-!["screenshot description"](#)
+!["screenshot description"](https://github.com/jpftolentino/TinyApp/blob/master/docs/TinyAppMain.png?raw=true)
+!["screenshot description"](https://github.com/jpftolentino/TinyApp/blob/master/docs/loggedinTinyApp.png?raw=true)
+!["screenshot description"](https://github.com/jpftolentino/TinyApp/blob/master/docs/login.png?raw=true)
 
 ## Dependencies
 
