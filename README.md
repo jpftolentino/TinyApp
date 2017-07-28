@@ -1,5 +1,5 @@
 # TinyApp is a full stack web application built with Node and Express that allows users to shorten long URLs (ie bit.ly).
-# It demonstrates basic understanding and implementation of RESTful routes and Express api, it also implements password and cookie encryption using bcrypt and an npm source called cookie-session
+It demonstrates basic understanding and implementation of RESTful routes and Express api, it also implements password and cookie encryption using bcrypt and an npm source called cookie-session
 
 ## Final Product
 
