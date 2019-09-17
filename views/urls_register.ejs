@@ -4,13 +4,63 @@
     <% include ./partials/head %>
   </head>
   <body>
-    <form action="/register" method="POST">
-      <label>Email:</label>
-      <input type="email" name="email" />
-      <label>Password:</label>
-      <input type="password" name="password" />
-      <input type="submit" value="Register" />
-    </form>
-    <% include ./partials/script %>
+    <div class="container jumbotron peach-gradient" style="margin-top: 5%;">
+      <div class="row justify-content-md-center">
+        <h3>Register</h3>
+      </div>
+      <div class="row justify-content-md-center">
+        <form action="/register" method="POST">
+          <div class="md-form">
+            <i class="fas fa-envelope prefix"></i>
+            <input
+              type="email"
+              name="email"
+              id="inputValidationEx"
+              class="form-control validate"
+            />
+            <label
+              for="inputValidationEx"
+              data-error="wrong"
+              data-success="right"
+              >Type your email</label
+            >
+          </div>
+          <div class="md-form">
+            <i class="fas fa-lock prefix"></i>
+            <input
+              type="password"
+              name="password"
+              id="inputValidationEx2"
+              class="form-control validate"
+            />
+            <label
+              for="inputValidationEx2"
+              data-error="wrong"
+              data-success="right"
+              >Type your password</label
+            >
+          </div>
+          <div class="row justify-content-md-center">
+            <input class="btn purple-gradient" type="submit" value="Submit" />
+            <a href="/urls" class="btn purple-gradient">Back</a>
+          </div>
+        </form>
+
+        <% include ./partials/script %>
+      </div>
+    </div>
   </body>
 </html>
+
+<!-- Material input -->
+<!-- <div class="md-form">
+  <i class="fas fa-lock prefix"></i>
+  <input
+    type="password"
+    id="inputValidationEx2"
+    class="form-control validate"
+  />
+  <label for="inputValidationEx2" data-error="wrong" data-success="right"
+    >Type your password</label
+  >
+</div> -->

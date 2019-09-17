@@ -1,9 +1,10 @@
 <% if(currentUser === false) {%>
-<a class="btn peach-gradient" href="/login">LOGIN</a>
-<a class="btn peach-gradient" href="/register">REGISTER</a>
+<a class="btn purple-gradient" href="/login">LOGIN</a>
+<a class="btn purple-gradient" href="/register">REGISTER</a>
 <% } else { %>
 <form method="POST" action="/logout">
-  <label><%= currentUser %></label>
-  <input class="btn peach-gradient" type="submit" value="Logout" />
+  <label><b><%= currentUser %></b></label>
+  <br />
+  <input class="btn purple-gradient" type="submit" value="Logout" />
 </form>
 <% } %>

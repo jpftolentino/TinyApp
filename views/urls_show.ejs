@@ -4,18 +4,37 @@
     <% include ./partials/head %>
   </head>
   <body>
-    <h2>Tiny App</h2>
-    <% include ./partials/_header %>
-    <!-- Add your EJS code here -->
-    <h2>ShortURL: <%= shortURL %></h2>
-    <form method="POST" action="/urls/<%= shortURL %>?_method=PUT">
-      <input
-        name="newURL"
-        type="text"
-        value="<%= urls[shortURL]['longURL'] %>"
-      />
-      <input type="submit" value="Update" />
-    </form>
+    <div class="container jumbotron peach-gradient" style="margin-top: 5%;">
+      <div class="row justify-content-md-center">
+        <h2>Tiny App</h2>
+      </div>
+      <!-- if user is not logged in show this  -->
+
+      <div class="row justify-content-md-center">
+        <p>Shorten those long and nasty urls!</p>
+      </div>
+
+      <hr style="width:50%" />
+
+      <div class="row justify-content-md-center">
+        <% include ./partials/_header %>
+      </div>
+      <!-- Add your EJS code here -->
+      <div class="row justify-content-md-center" style="margin:5% 0">
+        <h2>ShortURL: <%= shortURL %></h2>
+      </div>
+
+      <div class="row justify-content-md-center">
+        <form method="POST" action="/urls/<%= shortURL %>?_method=PUT">
+          <input
+            name="newURL"
+            type="text"
+            value="<%= urls[shortURL]['longURL'] %>"
+          />
+          <input class="btn purple-gradient" type="submit" value="Update" />
+        </form>
+      </div>
+    </div>
     <% include ./partials/script %>
   </body>
 </html>

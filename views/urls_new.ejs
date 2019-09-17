@@ -3,19 +3,41 @@
   <head>
     <% include ./partials/head %>
   </head>
-  <body style="font-size:20px; padding:50px;">
-    <% include partials/_header %>
-    <form action="/urls" method="POST" style="margin:150px;">
-      <label for="longURL">Enter a URL:</label>
-      <input
-        id="longURL"
-        type="text"
-        name="longURL"
-        placeholder="http://"
-        style="width: 300px"
-      />
-      <input type="submit" value="Submit" />
-    </form>
+  <body>
+    <div class="container jumbotron peach-gradient" style="margin-top: 5%;">
+      <div class="row justify-content-md-center">
+        <h2>Tiny App</h2>
+      </div>
+      <!-- if user is not logged in show this  -->
+
+      <div class="row justify-content-md-center">
+        <p>Shorten those long and nasty urls!</p>
+      </div>
+
+      <hr style="width:50%" />
+
+      <div class="row justify-content-md-center">
+        <% include partials/_header %>
+      </div>
+
+      <div class="row justify-content-md-center">
+        <div class="md-form">
+          <form action="/urls" method="POST" style="margin:5% 0">
+            <input
+              id="longURL"
+              type="text"
+              name="longURL"
+              placeholder="http://"
+              class="form-control validate"
+            />
+            <label for="longURL">Enter a URL:</label>
+
+            <input class="btn purple-gradient" type="submit" value="Submit" />
+            <a href="/urls" class="btn purple-gradient">Back</a>
+          </form>
+        </div>
+      </div>
+    </div>
     <% include ./partials/script %>
   </body>
 </html>

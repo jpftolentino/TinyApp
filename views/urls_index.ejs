@@ -4,10 +4,7 @@
     <% include ./partials/head %>
   </head>
   <body>
-    <div
-      class="container jumbotron mdb-color lighten-5"
-      style="margin-top: 300px;"
-    >
+    <div class="container jumbotron peach-gradient" style="margin-top: 5%;">
       <div class="row justify-content-md-center">
         <h2>Tiny App</h2>
       </div>
@@ -17,31 +14,65 @@
         <p>Shorten those long and nasty urls!</p>
       </div>
 
-      <hr />
+      <hr style="width:50%" />
 
       <div class="row justify-content-md-center">
-        <% include ./partials/_header %> <% if( currentUser === false) {%> <% }
-        else { %>
-        <table>
-          <% for( var key in urls) { %>
-          <tr>
-            <% if( urls[key]['id'] == users['id']) {%>
-            <form action="/urls/<%= key %>/delete?_method=DELETE" method="POST">
-              <td><a href="<%= urls[key]['longURL'] %>"><%= key %></a></td>
+        <% include ./partials/_header %>
+      </div>
+      <% if( currentUser === false) {%> <% } else { %>
+      <br />
+      <br />
+      <div class="row justify-content-md-center">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Original Url</th>
+              <th scope="col">Shortened Url</th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for( var key in urls) { %>
+            <tr>
+              <% if( urls[key]['id'] == users['id']) {%>
               <td><%= urls[key]['longURL'] %></td>
-              <td><a href="/urls/<%= urls[key]['shortURL'] %>">Edit</a></td>
-              <td><input type="submit" value="Delete" /></td>
-            </form>
+              <td>
+                <a style="color:#007bff" href="<%= urls[key]['longURL'] %>"
+                  ><%= key %></a
+                >
+              </td>
+              <td>
+                <a
+                  class="btn purple-gradient"
+                  href="/urls/<%= urls[key]['shortURL'] %>"
+                  >Edit</a
+                >
+              </td>
+              <td>
+                <form
+                  action="/urls/<%= key %>/delete?_method=DELETE"
+                  method="POST"
+                >
+                  <input
+                    class="btn purple-gradient"
+                    type="submit"
+                    value="Delete"
+                  />
+                </form>
+              </td>
+              <% } %>
+            </tr>
             <% } %>
-          </tr>
-          <% } %>
+          </tbody>
         </table>
       </div>
 
       <div class="row justify-content-md-center">
-        <a href="/urls/new"><br />Shorten URL</a>
-        <% } %> <% include ./partials/script %>
+        <a class="btn purple-gradient" href="/urls/new">Add</a>
       </div>
     </div>
+
+    <% } %> <% include ./partials/script %>
   </body>
 </html>
