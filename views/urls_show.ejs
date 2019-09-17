@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <h1>Tiny App</h1>
-</head>
-<body>
+  <head>
+    <% include ./partials/head %>
+  </head>
+  <body>
+    <h2>Tiny App</h2>
     <% include ./partials/_header %>
     <!-- Add your EJS code here -->
-  <h2>ShortURL: <%= shortURL %></h2>
-  <form method="POST" action="/urls/<%= shortURL %>?_method=PUT">
-    <input name="newURL" type="text" value="<%= urls[shortURL]['longURL'] %>">
-    <input type="submit" value="Update">
-  </form>
-</body>
+    <h2>ShortURL: <%= shortURL %></h2>
+    <form method="POST" action="/urls/<%= shortURL %>?_method=PUT">
+      <input
+        name="newURL"
+        type="text"
+        value="<%= urls[shortURL]['longURL'] %>"
+      />
+      <input type="submit" value="Update" />
+    </form>
+    <% include ./partials/script %>
+  </body>
 </html>

@@ -1,28 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <h1>Tiny App</h1>
-</head>
-<body>
-    <!-- if user is not logged in show this  -->
-    <% include ./partials/_header %>
-    <% if( currentUser === false) {%>
-      <p>Please Log In or Register</p>
-    <% } else { %>
-    <table><% for( var key in urls) { %>
-      <tr>
-        <% if( urls[key]['id'] == users['id']) {%>
-        <form action="/urls/<%= key %>/delete?_method=DELETE" method="POST">
-          <td><a href="<%= urls[key]['longURL'] %>"><%= key %></a></td>
-            <td><%= urls[key]['longURL'] %></td>
-            <td><a href="/urls/<%= urls[key]['shortURL'] %>">Edit</a></td>
-            <td><input type="submit" value="Delete"></td>
-        </form>
-        <% } %>
-      </tr>
-    <% } %>
-    </table>
-    <a href="/urls/new"><br />Shorten URL</a>
-    <% } %>
-</body>
+  <head>
+    <% include ./partials/head %>
+  </head>
+  <body>
+    <div
+      class="container jumbotron mdb-color lighten-5"
+      style="margin-top: 300px;"
+    >
+      <div class="row justify-content-md-center">
+        <h2>Tiny App</h2>
+      </div>
+      <!-- if user is not logged in show this  -->
+
+      <div class="row justify-content-md-center">
+        <p>Shorten those long and nasty urls!</p>
+      </div>
+
+      <hr />
+
+      <div class="row justify-content-md-center">
+        <% include ./partials/_header %> <% if( currentUser === false) {%> <% }
+        else { %>
+        <table>
+          <% for( var key in urls) { %>
+          <tr>
+            <% if( urls[key]['id'] == users['id']) {%>
+            <form action="/urls/<%= key %>/delete?_method=DELETE" method="POST">
+              <td><a href="<%= urls[key]['longURL'] %>"><%= key %></a></td>
+              <td><%= urls[key]['longURL'] %></td>
+              <td><a href="/urls/<%= urls[key]['shortURL'] %>">Edit</a></td>
+              <td><input type="submit" value="Delete" /></td>
+            </form>
+            <% } %>
+          </tr>
+          <% } %>
+        </table>
+      </div>
+
+      <div class="row justify-content-md-center">
+        <a href="/urls/new"><br />Shorten URL</a>
+        <% } %> <% include ./partials/script %>
+      </div>
+    </div>
+  </body>
 </html>

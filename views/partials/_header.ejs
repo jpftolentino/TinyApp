@@ -1,9 +1,9 @@
 <% if(currentUser === false) {%>
-  <a href="/login">LOGIN</a>
-  <a href="/register">REGISTER</a>
+<a class="btn peach-gradient" href="/login">LOGIN</a>
+<a class="btn peach-gradient" href="/register">REGISTER</a>
 <% } else { %>
-  <form method="POST" action="/logout">
-    <label><%= currentUser %></label>
-    <input type="submit" value="Logout">
-  </form>
+<form method="POST" action="/logout">
+  <label><%= currentUser %></label>
+  <input class="btn peach-gradient" type="submit" value="Logout" />
+</form>
 <% } %>

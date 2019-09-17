@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <% include ./partials/head %>
   </head>
   <body>
     <form action="/login" method="POST">
-        <label>Email:</label>
-        <input type="email" name="email" >
-        <label>Password:</label>
-        <input type="password" name="password">
-        <input type="submit" value="Login">
+      <label>Email:</label>
+      <input type="email" name="email" />
+      <label>Password:</label>
+      <input type="password" name="password" />
+      <input type="submit" value="Login" />
     </form>
+    <% include ./partials/script %>
   </body>
 </html>
