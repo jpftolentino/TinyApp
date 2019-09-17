@@ -4,9 +4,11 @@ It demonstrates basic understanding and implementation of RESTful routes and Exp
 
 ## Final Product
 
-!["screenshot description"](https://github.com/jpftolentino/TinyApp/blob/master/docs/TinyAppMain.png?raw=true)
-!["screenshot description"](https://github.com/jpftolentino/TinyApp/blob/master/docs/loggedinTinyApp.png?raw=true)
+!["screenshot description"](https://github.com/jpftolentino/TinyApp/blob/master/docs/mainpage.png?raw=true)
 !["screenshot description"](https://github.com/jpftolentino/TinyApp/blob/master/docs/login.png?raw=true)
+!["screenshot description"](https://github.com/jpftolentino/TinyApp/blob/master/docs/application.png?raw=true)
+!["screenshot description"](https://github.com/jpftolentino/TinyApp/blob/master/docs/editurl.png?raw=true)
+!["screenshot description"](https://github.com/jpftolentino/TinyApp/blob/master/docs/addurl.png?raw=true)
 
 ## Dependencies
 
